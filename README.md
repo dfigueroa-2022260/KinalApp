@@ -42,3 +42,19 @@ El proyecto está organizado siguiendo una arquitectura por capas:
 * **Config:** Clases de configuración global del sistema, incluyendo la seguridad
 
 El proyecto está organizado siguiendo una arquitectura por capas:
+
+## Estructura de la Entidad VentaLa entidad representa la tabla `ventas` en la base de datos y cuenta con los siguientes campos:
+* **id**: Identificador único autoincremental.* **fecha**: Fecha y hora automática de la transacción.* **cliente_id**: Relación con el cliente que realiza la compra.* **total**: Monto final calculado de la operación.* **estado**: Estado de la venta (PENDIENTE, COMPLETADA, CANCELADA).
+## Endpoints PrincipalesEl controlador de ventas expone las siguientes rutas:
+
+* `GET /api/ventas`: Obtiene el listado histórico.
+* `POST /api/ventas`: Registra una nueva venta.
+* `GET /api/ventas/{id}`: Detalle de una venta específica.
+
+## Estructura de la Entidad UsuarioLa entidad representa la tabla `usuarios` en la base de datos y cuenta con los siguientes campos:
+* **id**: Identificador único autoincremental.* **username**: Nombre de usuario para el inicio de sesión.* **password**: Contraseña (almacenada con cifrado BCrypt).* **email**: Correo electrónico de contacto y notificaciones.* **rol**: Nivel de permiso (ADMIN, USER, GUEST).
+## Endpoints de UsuarioRutas principales para la gestión de usuarios:
+
+* `POST /api/usuarios/registro`: Crea un nuevo usuario en el sistema.
+* `GET /api/usuarios/perfil/{id}`: Obtiene la información del perfil.
+* `PUT /api/usuarios/actualizar`: Modifica los datos del usuario actual.

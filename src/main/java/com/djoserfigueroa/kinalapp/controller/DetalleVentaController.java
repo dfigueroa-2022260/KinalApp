@@ -17,7 +17,7 @@ public class DetalleVentaController {
     public DetalleVentaController(IDetalleVentaService detalleVentaService) {
         this.detalleVentaService = detalleVentaService;
     }
-    
+
     @GetMapping
     public ResponseEntity<List<DetalleVenta>> listar() {
         List<DetalleVenta> detalles = detalleVentaService.listarTodos();
