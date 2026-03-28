@@ -165,3 +165,83 @@ La entidad representa la tabla `usuarios` en la base de datos y cuenta con los s
 | GET | `/usuarios/activos` | Lista solo los usuarios activos |
 | GET | `/usuarios/username/{username}` | Busca un usuario por username |
 | GET | `/usuarios/rol/{rol}` | Lista usuarios por rol |
+
+## Entidad Producto
+
+La entidad representa la tabla `productos` en la base de datos y cuenta con los siguientes campos:
+
+* **codigo_producto:** Identificador único autoincremental.
+* **nombre_producto:** Nombre del producto (único).
+* **precio:** Precio unitario del producto con dos decimales.
+* **stock:** Cantidad disponible en inventario.
+* **estado:** Estado del producto (1 = activo, 0 = inactivo).
+
+### Endpoints de Producto
+
+| Método | Ruta | Descripción |
+|--------|------|-------------|
+| GET | `/productos` | Lista todos los productos |
+| GET | `/productos/{codigo}` | Busca un producto por código |
+| POST | `/productos` | Registra un nuevo producto |
+| PUT | `/productos/{codigo}` | Actualiza los datos de un producto |
+| DELETE | `/productos/{codigo}` | Elimina un producto |
+| GET | `/productos/activos` | Lista solo los productos activos |
+| GET | `/productos/disponibles` | Lista productos con stock mayor a 0 |
+| GET | `/productos/buscar/{nombre}` | Busca productos por nombre |
+| GET | `/productos/precio/{precio}` | Lista productos hasta un precio máximo |
+
+## Entidad Venta
+
+La entidad representa la tabla `ventas` en la base de datos y cuenta con los siguientes campos:
+
+* **codigo_venta:** Identificador único autoincremental.
+* **fecha_venta:** Fecha en que se realizó la venta (se asigna automáticamente si no se envía).
+* **total:** Monto total de la venta con dos decimales.
+* **estado:** Estado de la venta (1 = activo, 0 = inactivo).
+* **Clientes_dpi_cliente:** Relación con el cliente que realiza la compra.
+* **Usuarios_codigo_usuario:** Relación con el usuario que registra la venta.
+
+### Endpoints de Venta
+
+| Método | Ruta | Descripción |
+|--------|------|-------------|
+| GET | `/ventas` | Lista todas las ventas |
+| GET | `/ventas/{codigo}` | Busca una venta por código |
+| POST | `/ventas` | Registra una nueva venta |
+| PUT | `/ventas/{codigo}` | Actualiza los datos de una venta |
+| DELETE | `/ventas/{codigo}` | Elimina una venta |
+| GET | `/ventas/activas` | Lista solo las ventas activas |
+| GET | `/ventas/cliente/{dpi}` | Lista las ventas de un cliente |
+| GET | `/ventas/usuario/{codigoUsuario}` | Lista las ventas registradas por un usuario |
+
+---
+
+## Entidad DetalleVenta
+
+La entidad representa la tabla `detalle_venta` en la base de datos y cuenta con los siguientes campos:
+
+* **codigo_detalle_venta:** Identificador único autoincremental.
+* **cantidad:** Número de unidades del producto en la venta.
+* **precio_unitario:** Precio del producto al momento de la venta.
+* **subtotal:** Resultado calculado automáticamente de `cantidad × precio_unitario`.
+* **Productos_codigo_producto:** Relación con el producto vendido.
+* **Ventas_codigo_venta:** Relación con la venta a la que pertenece el detalle.
+
+### Endpoints de DetalleVenta
+
+| Método | Ruta | Descripción |
+|--------|------|-------------|
+| GET | `/detalle-ventas` | Lista todos los detalles |
+| GET | `/detalle-ventas/{codigo}` | Busca un detalle por código |
+| POST | `/detalle-ventas` | Registra un nuevo detalle |
+| PUT | `/detalle-ventas/{codigo}` | Actualiza los datos de un detalle |
+| DELETE | `/detalle-ventas/{codigo}` | Elimina un detalle |
+| GET | `/detalle-ventas/venta/{codigoVenta}` | Lista los detalles de una venta |
+| GET | `/detalle-ventas/producto/{codigoProducto}` | Lista los detalles de un producto |
+| DELETE | `/detalle-ventas/venta/{codigoVenta}` | Elimina todos los detalles de una venta |
+
+---
+
+## Autor
+
+Desarrollado por **Djoser Figueroa** como proyecto de gestión de ventas con Spring Boot y MySQL
