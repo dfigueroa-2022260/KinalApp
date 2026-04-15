@@ -1,65 +1,111 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Formulario Detalle</title>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Formulario Detalle Venta - KinalApp</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 </head>
-<body class="container mt-4">
+<body>
 
-<h2 th:text="${detalle.codigoDetalleVenta} != 0 ? 'Editar Detalle' : 'Nuevo Detalle'}"></h2>
-
-<form th:action="@{/detalle-ventas/guardar}" th:object="${detalle}" method="post">
-
-    <div class="mb-3">
-        <label>Código</label>
-        <input type="number" th:field="*{codigoDetalleVenta}" class="form-control"/>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="#">KinalApp</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item"><a class="nav-link" th:href="@{/clientes}">Clientes</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/usuarios}">Usuarios</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/productos}">Productos</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/ventas}">Ventas</a></li>
+                <li class="nav-item"><a class="nav-link active" th:href="@{/detalle-ventas}">Detalle Ventas</a></li>
+            </ul>
+        </div>
     </div>
+</nav>
 
-    <!-- Venta -->
-    <div class="mb-3">
-        <label>Venta</label>
-        <select th:field="*{venta}" class="form-control" required>
-            <option value="">Seleccione una venta</option>
-            <option th:each="v : ${ventas}"
-                    th:value="${v}"
-                    th:text="'Venta #' + ${v.codigoVenta}">
-            </option>
-        </select>
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-dark text-white">
+                    <h5 th:if="${detalle.codigoDetalleVenta == 0}">
+                        <i class="bi bi-plus-circle"></i> Nuevo Detalle
+                    </h5>
+                    <h5 th:if="${detalle.codigoDetalleVenta != 0}">
+                        <i class="bi bi-pencil-fill"></i> Editar Detalle
+                    </h5>
+                </div>
+                <div class="card-body">
+
+                    <div th:if="${error}" class="alert alert-danger">
+                        <span th:text="${error}"></span>
+                    </div>
+
+                    <form th:action="@{/detalle-ventas/guardar}" th:object="${detalle}" method="post">
+
+                        <input type="hidden" th:field="*{codigoDetalleVenta}">
+
+                        <!-- Venta -->
+                        <div class="mb-3">
+                            <label class="form-label">Venta</label>
+                            <select class="form-select" name="venta.codigoVenta" required>
+                                <option value="">-- Seleccione una venta --</option>
+                                <option th:each="venta : ${ventas}"
+                                        th:value="${venta.codigoVenta}"
+                                        th:text="'Venta #' + ${venta.codigoVenta} + ' - ' + ${venta.cliente.nombreCliente}"
+                                        th:selected="${detalle.venta != null && detalle.venta.codigoVenta == venta.codigoVenta}">
+                                </option>
+                            </select>
+                        </div>
+
+                        <!-- Producto -->
+                        <div class="mb-3">
+                            <label class="form-label">Producto</label>
+                            <select class="form-select" name="producto.codigoProducto" required>
+                                <option value="">-- Seleccione un producto --</option>
+                                <option th:each="producto : ${productos}"
+                                        th:value="${producto.codigoProducto}"
+                                        th:text="${producto.nombreProducto} + ' (Stock: ' + ${producto.stock} + ')'"
+                                        th:selected="${detalle.producto != null && detalle.producto.codigoProducto == producto.codigoProducto}">
+                                </option>
+                            </select>
+                        </div>
+
+                        <!-- Cantidad -->
+                        <div class="mb-3">
+                            <label class="form-label">Cantidad</label>
+                            <input type="number" min="1" class="form-control"
+                                   th:field="*{cantidad}"
+                                   placeholder="0"
+                                   required>
+                        </div>
+
+                        <!-- Precio Unitario -->
+                        <div class="mb-3">
+                            <label class="form-label">Precio Unitario (Q)</label>
+                            <input type="number" step="0.01" min="0" class="form-control"
+                                   th:field="*{precioUnitario}"
+                                   placeholder="0.00"
+                                   required>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a th:href="@{/detalle-ventas}" class="btn btn-secondary">
+                                <i class="bi bi-arrow-left"></i> Cancelar
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-save-fill"></i> Guardar
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
+</div>
 
-    <!-- Producto -->
-    <div class="mb-3">
-        <label>Producto</label>
-        <select th:field="*{producto}" class="form-control" required>
-            <option value="">Seleccione un producto</option>
-            <option th:each="p : ${productos}"
-                    th:value="${p}"
-                    th:text="${p.nombreProducto}">
-            </option>
-        </select>
-    </div>
-
-    <div class="mb-3">
-        <label>Cantidad</label>
-        <input type="number" th:field="*{cantidad}" class="form-control" required/>
-    </div>
-
-    <div class="mb-3">
-        <label>Precio Unitario</label>
-        <input type="number" step="0.01" th:field="*{precioUnitario}" class="form-control"/>
-    </div>
-
-    <div class="mb-3">
-        <label>Subtotal</label>
-        <input type="number" step="0.01" th:field="*{subtotal}" class="form-control"/>
-    </div>
-
-    <button class="btn btn-success">Guardar</button>
-</form>
-
-<br>
-<a th:href="@{/detalle-ventas}" class="btn btn-secondary">Volver</a>
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
