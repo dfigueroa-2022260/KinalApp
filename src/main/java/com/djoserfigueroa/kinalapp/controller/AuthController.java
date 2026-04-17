@@ -15,7 +15,6 @@ public class AuthController {
         this.usuarioService = usuarioService;
     }
 
-    // ─── LOGIN ───────────────────────────────────────────
     @GetMapping("/login")
     public String loginPage() {
         return "login";
@@ -47,7 +46,6 @@ public class AuthController {
         }
     }
 
-    // ─── REGISTER ────────────────────────────────────────
     @GetMapping("/register")
     public String registerPage(Model model) {
         model.addAttribute("usuario", new Usuario());
@@ -58,14 +56,13 @@ public class AuthController {
     public String doRegister(@ModelAttribute Usuario usuario,
                              @RequestParam String confirmPassword,
                              Model model) {
-        // Validar contraseñas coincidentes
+
         if (!usuario.getPassword().equals(confirmPassword)) {
             model.addAttribute("error", "Las contraseñas no coinciden.");
             model.addAttribute("usuario", usuario);
             return "register";
         }
 
-        // Asignar rol por defecto si no se envía
         if (usuario.getRol() == null || usuario.getRol().isEmpty()) {
             usuario.setRol("USER");
         }

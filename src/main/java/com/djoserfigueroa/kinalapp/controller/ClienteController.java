@@ -47,7 +47,6 @@ public class ClienteController {
     @PostMapping
     public ResponseEntity<?> guardar(@RequestBody Cliente cliente) {
         // @RequestBody: Toma el JSON del cuerpo y lo convierte a un objeto de tipo Cliente
-        // <?> significa "tipo genérico", puede ser un Cliente o un String
         try {
             Cliente nuevoCliente = clienteService.guardar(cliente);
             // Intentamos guardar el cliente pero puede lanzar una excepción
