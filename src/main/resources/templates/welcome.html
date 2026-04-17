@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/><title>Welcome</title>
+    <style>
+        body { min-height:100vh; background:linear-gradient(180deg,#0d1b2e,#1a3a5c,#112233); display:flex; align-items:center; justify-content:center; font-family:'Lato',sans-serif; }
+        .card { background:rgba(180,200,220,0.18); border:1px solid rgba(200,220,255,0.2); border-radius:14px; backdrop-filter:blur(18px); padding:40px 36px; text-align:center; color:#e8f0ff; min-width:280px; }
+        h2 { font-size:26px; margin-bottom:8px; }
+        .role { display:inline-block; background:rgba(168,212,245,0.2); color:#a8d4f5; font-size:11px; letter-spacing:1px; padding:3px 12px; border-radius:20px; margin-bottom:20px; }
+        p { color:rgba(200,230,255,0.8); margin-bottom:24px; font-size:14px; }
+        a { color:#a8d4f5; text-decoration:none; font-size:13px; border:1px solid rgba(168,212,245,0.4); padding:8px 20px; border-radius:6px; }
+        a:hover { background:rgba(168,212,245,0.1); }
+    </style>
+</head>
+<body>
+<div class="card">
+    <h2>¡Bienvenido!</h2>
+    <span class="role" th:text="${usuario.rol}">USER</span>
+    <p>Hola, <strong th:text="${usuario.username}"></strong>.<br/>Has iniciado sesión correctamente.</p>
+    <a th:href="@{/login}">← Cerrar sesión</a>
+</div>
+</body>
+</html>

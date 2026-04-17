@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Register</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet"/>
+    <style>
+        /* mismo estilo que login */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { min-height: 100vh; background: linear-gradient(180deg, #0d1b2e 0%, #1a3a5c 40%, #1a3a4a 80%, #112233 100%); font-family: 'Lato', sans-serif; display: flex; flex-direction: column; }
+        nav { display: flex; align-items: center; justify-content: space-between; padding: 14px 36px; }
+        .logo { font-family: 'Cinzel', serif; font-size: 20px; color: #fff; letter-spacing: 2px; }
+        .nav-links { display: flex; gap: 28px; align-items: center; }
+        .nav-links a { color: rgba(255,255,255,0.85); font-size: 13px; text-decoration: none; letter-spacing: 1px; }
+        .nav-btn { border: 1.5px solid rgba(255,255,255,0.7); border-radius: 4px; padding: 5px 18px; color: #fff; font-size: 13px; background: transparent; cursor: pointer; }
+        .page-center { flex: 1; display: flex; align-items: center; justify-content: center; padding: 20px 0; }
+        .card { background: rgba(180,200,220,0.18); border: 1px solid rgba(200,220,255,0.2); border-radius: 14px; backdrop-filter: blur(18px); padding: 36px 32px 28px; width: 360px; max-width: 95vw; }
+        h2 { font-family: 'Cinzel', serif; font-size: 24px; color: #fff; text-align: center; margin-bottom: 24px; font-weight: 400; }
+        .form-group { margin-bottom: 16px; position: relative; }
+        .form-group input { width: 100%; background: rgba(255,255,255,0.07); border: none; border-bottom: 1.5px solid rgba(200,220,255,0.45); padding: 9px 36px 9px 10px; color: #e8f0ff; font-size: 13px; font-family: 'Lato', sans-serif; outline: none; }
+        .form-group input::placeholder { color: rgba(200,220,255,0.55); }
+        .form-group input:focus { border-bottom-color: #a8d0f0; background: rgba(255,255,255,0.12); }
+        .icon { position: absolute; right: 8px; top: 50%; transform: translateY(-50%); font-size: 14px; color: rgba(180,210,255,0.55); }
+        .btn { width: 100%; background: #1a2a3a; color: #fff; border: none; border-radius: 6px; padding: 12px; font-family: 'Cinzel', serif; font-size: 14px; letter-spacing: 2px; cursor: pointer; margin-bottom: 14px; }
+        .btn:hover { background: #243548; }
+        .switch { text-align: center; font-size: 12px; color: rgba(200,220,255,0.7); }
+        .switch a { color: #a8d4f5; font-weight: 700; text-decoration: none; }
+        .msg-error { text-align: center; color: #f4a7a7; font-size: 12px; margin-top: 10px; }
+    </style>
+</head>
+<body>
+<nav>
+    <span class="logo">KinalApp</span>
+    <div class="nav-links">
+        <a href="#">Home</a><a href="#">About</a><a href="#">Services</a><a href="#">Contact</a>
+        <button class="nav-btn" onclick="location.href='/login'">Login</button>
+    </div>
+</nav>
+<div class="page-center">
+    <div class="card">
+        <h2>Register</h2>
+        <form method="post" th:action="@{/register}" th:object="${usuario}">
+            <div class="form-group">
+                <input type="text" th:field="*{username}" placeholder="Username" required/>
+                <span class="icon">👤</span>
+            </div>
+            <div class="form-group">
+                <input type="email" th:field="*{email}" placeholder="Email" required/>
+                <span class="icon">✉</span>
+            </div>
+            <div class="form-group">
+                <input type="password" th:field="*{password}" placeholder="Password" required/>
+                <span class="icon">🔒</span>
+            </div>
+            <div class="form-group">
+                <input type="password" name="confirmPassword" placeholder="Confirm Password" required/>
+                <span class="icon">🔒</span>
+            </div>
+            <!-- Rol oculto, el controller asigna "USER" por defecto -->
+            <input type="hidden" th:field="*{rol}" value="USER"/>
+            <button type="submit" class="btn">Register</button>
+        </form>
+        <div class="switch">¿Ya tienes cuenta? <a th:href="@{/login}">Inicia sesión</a></div>
+        <p th:if="${error}" class="msg-error" th:text="${error}"></p>
+    </div>
+</div>
+</body>
+</html>
