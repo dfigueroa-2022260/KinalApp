@@ -24,7 +24,7 @@ public class UsuarioDetailsService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + username));
 
         if (usuario.getEstado() != 1) {
-            throw new DisabledException("Cuenta inactiva"); // ✅ ahora sí reconoce la clase
+            throw new DisabledException("Cuenta inactiva");
         }
 
         return User.builder()
