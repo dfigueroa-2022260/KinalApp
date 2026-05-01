@@ -30,13 +30,13 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login", "/register", "/css/**", "/js/**").permitAll()
-                        .anyRequest().authenticated()
+                        .requestMatchers("/login", "/register", "/css/**", "/js/**", "/img/**", "/webjars/**").permitAll()
+                        .anyRequest().authenticated() // ✅ / requiere login
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
                         .loginProcessingUrl("/login")
-                        .defaultSuccessUrl("/dashboard", true)
+                        .defaultSuccessUrl("/", true) // ✅ redirige al index tras login
                         .failureUrl("/login?error=true")
                         .permitAll()
                 )
