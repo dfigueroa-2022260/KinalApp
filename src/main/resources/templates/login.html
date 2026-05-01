@@ -44,7 +44,7 @@
         .btn:hover { background: #243548; }
         .switch { text-align: center; font-size: 12px; color: rgba(200,220,255,0.7); }
         .switch a { color: #a8d4f5; font-weight: 700; text-decoration: none; }
-        .msg-error { text-align: center; color: #f4a7a7; font-size: 12px; margin-top: 10px; }
+        .msg-error   { text-align: center; color: #f4a7a7; font-size: 12px; margin-top: 10px; }
         .msg-success { text-align: center; color: #a7f4c2; font-size: 12px; margin-top: 10px; }
     </style>
 </head>
@@ -59,7 +59,11 @@
 <div class="page-center">
     <div class="card">
         <h2>Login</h2>
+
         <form method="post" th:action="@{/login}">
+            <!-- ✅ CSRF obligatorio con Spring Security -->
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
             <div class="form-group">
                 <input type="text" name="username" placeholder="Username" required/>
                 <span class="icon">👤</span>
@@ -74,9 +78,13 @@
             </div>
             <button type="submit" class="btn">Login</button>
         </form>
+
         <div class="switch">¿No tienes cuenta? <a th:href="@{/register}">Regístrate</a></div>
-        <p th:if="${error}"   class="msg-error"   th:text="${error}"></p>
-        <p th:if="${success}" class="msg-success" th:text="${success}"></p>
+
+        <!-- ✅ Spring Security manda ?error y ?logout como parámetros en la URL -->
+        <p th:if="${param.error}"   class="msg-error">Usuario o contraseña incorrectos.</p>
+        <p th:if="${param.logout}"  class="msg-success">Sesión cerrada correctamente.</p>
+        <p th:if="${param.success}" class="msg-success">Cuenta creada. Inicia sesión.</p>
     </div>
 </div>
 </body>

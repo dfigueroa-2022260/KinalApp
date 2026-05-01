@@ -1,23 +1,33 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <meta charset="UTF-8"/><title>Welcome</title>
+    <meta charset="UTF-8"/><title>Welcome - KinalApp</title>
     <style>
         body { min-height:100vh; background:linear-gradient(180deg,#0d1b2e,#1a3a5c,#112233); display:flex; align-items:center; justify-content:center; font-family:'Lato',sans-serif; }
         .card { background:rgba(180,200,220,0.18); border:1px solid rgba(200,220,255,0.2); border-radius:14px; backdrop-filter:blur(18px); padding:40px 36px; text-align:center; color:#e8f0ff; min-width:280px; }
         h2 { font-size:26px; margin-bottom:8px; }
         .role { display:inline-block; background:rgba(168,212,245,0.2); color:#a8d4f5; font-size:11px; letter-spacing:1px; padding:3px 12px; border-radius:20px; margin-bottom:20px; }
         p { color:rgba(200,230,255,0.8); margin-bottom:24px; font-size:14px; }
-        a { color:#a8d4f5; text-decoration:none; font-size:13px; border:1px solid rgba(168,212,245,0.4); padding:8px 20px; border-radius:6px; }
-        a:hover { background:rgba(168,212,245,0.1); }
+        .logout-btn { color:#a8d4f5; text-decoration:none; font-size:13px; border:1px solid rgba(168,212,245,0.4); padding:8px 20px; border-radius:6px; background:transparent; cursor:pointer; font-family:'Lato',sans-serif; }
+        .logout-btn:hover { background:rgba(168,212,245,0.1); }
     </style>
 </head>
 <body>
 <div class="card">
     <h2>¡Bienvenido!</h2>
-    <span class="role" th:text="${usuario.rol}">USER</span>
-    <p>Hola, <strong th:text="${usuario.username}"></strong>.<br/>Has iniciado sesión correctamente.</p>
-    <a th:href="@{/}">← Ir al portal</a>
+
+    <!-- ✅ Lee el rol del usuario autenticado por Spring Security -->
+    <span class="role" sec:authentication="principal.authorities">ROL</span>
+
+    <!-- ✅ Lee el username del usuario autenticado por Spring Security -->
+    <p>Hola, <strong sec:authentication="name">usuario</strong>.<br/>Has iniciado sesión correctamente.</p>
+
+    <!-- ✅ Logout debe ser POST con CSRF para Spring Security -->
+    <form th:action="@{/logout}" method="post" style="display:inline;">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+        <button type="submit" class="logout-btn">← Cerrar sesión</button>
+    </form>
 </div>
 </body>
 </html>
