@@ -2,7 +2,7 @@ package com.djoserfigueroa.kinalapp.service;
 
 import com.djoserfigueroa.kinalapp.entity.Usuario;
 import com.djoserfigueroa.kinalapp.repository.UsuarioRepository;
-import org.springframework.security.crypto.password.PasswordEncoder; // ✅ import nuevo
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
