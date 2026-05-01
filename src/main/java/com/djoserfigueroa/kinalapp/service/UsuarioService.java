@@ -2,6 +2,7 @@ package com.djoserfigueroa.kinalapp.service;
 
 import com.djoserfigueroa.kinalapp.entity.Usuario;
 import com.djoserfigueroa.kinalapp.repository.UsuarioRepository;
+import org.springframework.security.crypto.password.PasswordEncoder; // ✅ import nuevo
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,9 +14,11 @@ import java.util.Optional;
 public class UsuarioService implements IUsuarioService {
 
     private final UsuarioRepository usuarioRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UsuarioService(UsuarioRepository usuarioRepository) {
+    public UsuarioService(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder) {
         this.usuarioRepository = usuarioRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -35,8 +38,9 @@ public class UsuarioService implements IUsuarioService {
         }
         if (usuario.getEstado() == 0) {
             usuario.setEstado(1);
-            // Si no se envía estado, se activa por defecto
         }
+
+        usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
         return usuarioRepository.save(usuario);
     }
 
@@ -60,7 +64,6 @@ public class UsuarioService implements IUsuarioService {
         if (!usuarioRepository.existsById(codigoUsuario)) {
             throw new RuntimeException("El usuario no se encontró con el código " + codigoUsuario);
         }
-        // Verificar que el username no lo use OTRO usuario
         usuarioRepository.findByUsername(usuario.getUsername())
                 .ifPresent(u -> {
                     if (u.getCodigoUsuario() != codigoUsuario) {
@@ -69,6 +72,7 @@ public class UsuarioService implements IUsuarioService {
                 });
         usuario.setCodigoUsuario(codigoUsuario);
         validarUsuario(usuario);
+        usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
         return usuarioRepository.save(usuario);
     }
 

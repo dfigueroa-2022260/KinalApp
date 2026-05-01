@@ -15,20 +15,17 @@ public class AuthController {
         this.usuarioService = usuarioService;
     }
 
-    // ✅ Solo GET — Spring Security maneja el POST automáticamente
     @GetMapping("/login")
     public String loginPage() {
         return "login";
     }
 
-    // ✅ Solo muestra el formulario
     @GetMapping("/register")
     public String registerPage(Model model) {
         model.addAttribute("usuario", new Usuario());
         return "register";
     }
 
-    // ✅ Registra y redirige al login con ?success
     @PostMapping("/register")
     public String doRegister(@ModelAttribute Usuario usuario,
                              @RequestParam String confirmPassword,
@@ -46,19 +43,11 @@ public class AuthController {
 
         try {
             usuarioService.guardar(usuario);
-            // Redirige al login — el ?success muestra el mensaje verde en login.html
             return "redirect:/login?success";
-
         } catch (IllegalArgumentException e) {
             model.addAttribute("error", e.getMessage());
             model.addAttribute("usuario", usuario);
             return "register";
         }
-    }
-
-    // ✅ Página tras login exitoso — Spring Security redirige aquí
-    @GetMapping("/dashboard")
-    public String dashboard() {
-        return "welcome";
     }
 }
