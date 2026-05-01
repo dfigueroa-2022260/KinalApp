@@ -33,4 +33,5 @@ public class UsuarioDetailsService implements UserDetailsService {
                 .authorities(List.of(new SimpleGrantedAuthority("ROLE_" + usuario.getRol())))
                 .build();
     }
+    
 }
