@@ -38,7 +38,11 @@
 <div class="page-center">
     <div class="card">
         <h2>Register</h2>
+
         <form method="post" th:action="@{/register}" th:object="${usuario}">
+            <!-- ✅ CSRF obligatorio con Spring Security -->
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
             <div class="form-group">
                 <input type="text" th:field="*{username}" placeholder="Username" required/>
                 <span class="icon">👤</span>
@@ -55,10 +59,13 @@
                 <input type="password" name="confirmPassword" placeholder="Confirm Password" required/>
                 <span class="icon">🔒</span>
             </div>
-            <!-- Rol oculto, el controller asigna "USER" por defecto -->
-            <input type="hidden" th:field="*{rol}" value="USER"/>
+
+            <!-- ✅ rol fijo como USER, sin th:field para evitar conflicto con el objeto -->
+            <input type="hidden" name="rol" value="USER"/>
+
             <button type="submit" class="btn">Register</button>
         </form>
+
         <div class="switch">¿Ya tienes cuenta? <a th:href="@{/login}">Inicia sesión</a></div>
         <p th:if="${error}" class="msg-error" th:text="${error}"></p>
     </div>

@@ -15,43 +15,20 @@ public class AuthController {
         this.usuarioService = usuarioService;
     }
 
+    // ✅ Solo GET — Spring Security maneja el POST automáticamente
     @GetMapping("/login")
     public String loginPage() {
         return "login";
     }
 
-    @PostMapping("/login")
-    public String doLogin(@RequestParam String username,
-                          @RequestParam String password,
-                          Model model) {
-        try {
-            Usuario usuario = usuarioService.buscarPorUsername(username)
-                    .orElse(null);
-
-            if (usuario == null || !usuario.getPassword().equals(password)) {
-                model.addAttribute("error", "Usuario o contraseña incorrectos.");
-                return "login";
-            }
-            if (usuario.getEstado() != 1) {
-                model.addAttribute("error", "Tu cuenta está inactiva.");
-                return "login";
-            }
-
-            model.addAttribute("usuario", usuario);
-            return "welcome";
-
-        } catch (Exception e) {
-            model.addAttribute("error", "Error al iniciar sesión.");
-            return "login";
-        }
-    }
-
+    // ✅ Solo muestra el formulario
     @GetMapping("/register")
     public String registerPage(Model model) {
         model.addAttribute("usuario", new Usuario());
         return "register";
     }
 
+    // ✅ Registra y redirige al login con ?success
     @PostMapping("/register")
     public String doRegister(@ModelAttribute Usuario usuario,
                              @RequestParam String confirmPassword,
@@ -69,14 +46,19 @@ public class AuthController {
 
         try {
             usuarioService.guardar(usuario);
-            model.addAttribute("success", "Cuenta creada exitosamente. Inicia sesión.");
-            return "login";
+            // Redirige al login — el ?success muestra el mensaje verde en login.html
+            return "redirect:/login?success";
 
         } catch (IllegalArgumentException e) {
-            // Captura username/email duplicado u otras validaciones del service
             model.addAttribute("error", e.getMessage());
             model.addAttribute("usuario", usuario);
             return "register";
         }
+    }
+
+    // ✅ Página tras login exitoso — Spring Security redirige aquí
+    @GetMapping("/dashboard")
+    public String dashboard() {
+        return "welcome";
     }
 }
